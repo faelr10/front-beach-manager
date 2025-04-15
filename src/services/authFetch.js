@@ -1,6 +1,6 @@
 import { refreshToken } from "./refreshToken";
 
-const API_URL = "https://beach-manager.onrender.com";
+const API_URL = "https://beach-manager-api.onrender.com";
 
 export async function authFetch(endpoint, options = {}) {
   const token = localStorage.getItem("token");
