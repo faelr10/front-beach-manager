@@ -1,4 +1,3 @@
-// src/services/authFetch.js
 import { refreshToken } from "./refreshToken";
 
 const API_URL = "https://beach-manager.onrender.com";
@@ -37,8 +36,20 @@ export async function authFetch(endpoint, options = {}) {
     }
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Erro ao fazer requisição");
+      // Tenta ler a mensagem de erro, se existir
+      let errorMessage = "Erro ao fazer requisição";
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorMessage;
+      } catch (_) {
+        // ignora se não tiver JSON no erro
+      }
+      throw new Error(errorMessage);
+    }
+
+    // Trata 204 No Content
+    if (response.status === 204) {
+      return null;
     }
 
     return await response.json();

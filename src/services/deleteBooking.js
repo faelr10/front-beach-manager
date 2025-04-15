@@ -3,11 +3,14 @@ import { authFetch } from "./authFetch";
 
 export async function deleteBookingAPI(id) {
   try {
-    await authFetch(`/agendas/${id}`, {
+    const response = await authFetch(`/agendas/${id}`, {
       method: "DELETE",
     });
 
-    return true;
+    if (response === null || response === undefined) {
+      return true;
+    }
+    return response;
   } catch (error) {
     console.error("Erro ao deletar agendamento:", error);
     throw error;
