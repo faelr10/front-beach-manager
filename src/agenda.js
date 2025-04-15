@@ -57,7 +57,6 @@ const NewBookingButton = styled.button`
   }
 `;
 
-
 const Toolbar = styled.div`
   display: flex;
   justify-content: space-between;
@@ -128,7 +127,6 @@ const Grid = styled.div`
   }
 `;
 
-
 const GridHeader = styled.div`
   min-width: 90px;
   text-align: center;
@@ -137,7 +135,6 @@ const GridHeader = styled.div`
   background-color: ${(props) => (props.isToday ? "#e0f2fe" : "transparent")};
   border-radius: ${(props) => (props.isToday ? "0.5rem" : "0")};
 `;
-
 
 const SubText = styled.div`
   font-size: 0.875rem;
@@ -157,7 +154,6 @@ const TimeCell = styled.div`
   font-size: clamp(0.75rem, 1vw, 0.875rem);
   color: #4b5563;
 `;
-
 
 const GridCell = styled.div`
   height: 2rem;
@@ -198,8 +194,6 @@ const BookingBlock = styled.div`
     filter: brightness(1.05);
   }
 `;
-
-
 
 const LogoutButton = styled(NewBookingButton)`
   background-color: #ef4444;
@@ -287,9 +281,7 @@ export default function VolleyballCourtBooking() {
             <NewBookingButton onClick={() => setShowModal(true)}>
               + Novo Agendamento
             </NewBookingButton>
-            <LogoutButton onClick={() => handleLogout()}>
-              Sair
-            </LogoutButton>
+            <LogoutButton onClick={() => handleLogout()}>Sair</LogoutButton>
           </div>
         </Header>
 

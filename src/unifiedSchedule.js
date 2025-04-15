@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import styled from "styled-components";
 import { format, addDays, startOfWeek } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -62,17 +62,14 @@ const BookingItem = styled.div`
 `;
 
 const useMediaQuery = (query) => {
-  const [matches, setMatches] = useState(false);
+  const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
 
   useEffect(() => {
     const media = window.matchMedia(query);
-    if (media.matches !== matches) {
-      setMatches(media.matches);
-    }
     const listener = () => setMatches(media.matches);
     media.addEventListener("change", listener);
     return () => media.removeEventListener("change", listener);
-  }, [matches, query]);
+  }, [query]);
 
   return matches;
 };
@@ -84,19 +81,13 @@ const MobileSchedule = () => {
   const [selectedBooking, setSelectedBooking] = useState(null);
 
   useEffect(() => {
-    const fetch = async () => {
-      try {
-        const data = await getAllAgendas();
-        setBookings(data);
-      } catch (error) {
-        console.error("Erro ao buscar agendamentos:", error);
-      }
-    };
-    fetch();
+    getAllAgendas()
+      .then(setBookings)
+      .catch((error) => console.error("Erro ao buscar agendamentos:", error));
   }, []);
 
-  const weekStart = startOfWeek(new Date(), { weekStartsOn: 1 });
-  const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
+  const weekStart = useMemo(() => startOfWeek(new Date(), { weekStartsOn: 1 }), []);
+  const days = useMemo(() => Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)), [weekStart]);
 
   const generateColorById = (id) => {
     const hash = Array.from(id).reduce((acc, char) => acc + char.charCodeAt(0), 0);
@@ -109,17 +100,10 @@ const MobileSchedule = () => {
     window.location.href = "/login";
   };
 
-  const handleNewBooking = () => {
-    setShowModal(true);
-  };
+  const handleNewBooking = () => setShowModal(true);
+  const handleEditBooking = (booking) => setSelectedBooking(booking);
 
-  const handleEditBooking = (booking) => {
-    setSelectedBooking(booking);
-  };
-
-  if (!isMobile) {
-    return <VolleyballCourtBooking />;
-  }
+  if (!isMobile) return <VolleyballCourtBooking />;
 
   return (
     <MobileAgendaWrapper>
@@ -129,8 +113,9 @@ const MobileSchedule = () => {
       </TopButtons>
 
       {days.map((day, i) => {
+        const dayString = format(day, "yyyy-MM-dd");
         const dayBookings = bookings
-          .filter((b) => b.date === format(day, "yyyy-MM-dd"))
+          .filter((b) => b.date === dayString)
           .sort((a, b) => a.start_time.localeCompare(b.start_time));
 
         return (
@@ -177,4 +162,4 @@ const MobileSchedule = () => {
   );
 };
 
-export default MobileSchedule; // Você pode renomear isso para UnifiedSchedule se quiser combinar com o desktop
+export default MobileSchedule;
