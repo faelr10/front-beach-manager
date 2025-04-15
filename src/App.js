@@ -1,7 +1,7 @@
 import "./App.css";
-import VolleyballCourtBooking from "./agenda";
 import { useState, useEffect } from "react";
 import LoginPage from "./loginPage";
+import MobileSchedule from "./unifiedSchedule";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -12,7 +12,6 @@ function App() {
     setIsAuthenticated(true);
   };
 
-  // Se quiser, também pode adicionar um logout automático se o token for removido
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -23,7 +22,7 @@ function App() {
   return (
     <div className="App">
       {isAuthenticated ? (
-        <VolleyballCourtBooking />
+        <MobileSchedule />
       ) : (
         <LoginPage onLogin={handleLogin} />
       )}
