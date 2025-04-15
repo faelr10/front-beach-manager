@@ -1,5 +1,6 @@
-import "./App.css";
-import { useState, useEffect } from "react";
+// App.js
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import LoginPage from "./loginPage";
 import MobileSchedule from "./unifiedSchedule";
 
@@ -8,25 +9,37 @@ function App() {
     return !!localStorage.getItem("token");
   });
 
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-  };
-
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      setIsAuthenticated(false);
-    }
+    setIsAuthenticated(!!token);
   }, []);
 
   return (
-    <div className="App">
-      {isAuthenticated ? (
-        <MobileSchedule />
-      ) : (
-        <LoginPage onLogin={handleLogin} />
-      )}
-    </div>
+    <Router>
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            isAuthenticated ? (
+              <Navigate to="/agendamento" replace />
+            ) : (
+              <LoginPage onLogin={() => setIsAuthenticated(true)} />
+            )
+          }
+        />
+        <Route
+          path="/agendamento"
+          element={
+            isAuthenticated ? (
+              <MobileSchedule />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </Router>
   );
 }
 
