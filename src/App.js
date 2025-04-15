@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import VolleyballCourtBooking from "./agenda";
+import { useState, useEffect } from "react";
+import LoginPage from "./loginPage";
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return !!localStorage.getItem("token");
+  });
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+  };
+
+  // Se quiser, também pode adicionar um logout automático se o token for removido
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setIsAuthenticated(false);
+    }
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {isAuthenticated ? (
+        <VolleyballCourtBooking />
+      ) : (
+        <LoginPage onLogin={handleLogin} />
+      )}
     </div>
   );
 }
