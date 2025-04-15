@@ -8,25 +8,27 @@ import EditBookingModal from "./editBookingModal";
 import VolleyballCourtBooking from "./agenda";
 
 const MobileAgendaWrapper = styled.div`
-  padding: 1rem;
+  padding: 1.5rem 1rem 1rem;
   background-color: #f0f4ff;
+  min-height: 100vh;
 `;
 
 const TopButtons = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  margin-top: 0.5rem;
 `;
 
 const Button = styled.button`
   flex: 1;
-  padding: 0.75rem;
+  padding: 0.85rem 1rem;
   background-color: ${(props) => (props.danger ? "#ef4444" : "#3b82f6")};
   color: white;
   border: none;
   border-radius: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: bold;
   cursor: pointer;
 
