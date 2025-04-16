@@ -64,7 +64,9 @@ const BookingItem = styled.div`
 `;
 
 const useMediaQuery = (query) => {
-  const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
+  const [matches, setMatches] = useState(
+    () => window.matchMedia(query).matches
+  );
 
   useEffect(() => {
     const media = window.matchMedia(query);
@@ -83,16 +85,48 @@ const MobileSchedule = () => {
   const [selectedBooking, setSelectedBooking] = useState(null);
 
   useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        console.log("📱 Retornou à aba, recarregando dados...");
+
+        // Espera 1 segundo para garantir que o backend do Render já acordou
+        setTimeout(() => {
+          getAllAgendas()
+            .then(setBookings)
+            .catch((error) =>
+              console.error("Erro ao recarregar agendamentos:", error)
+            );
+        }, 1000);
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
+  useEffect(() => {
     getAllAgendas()
       .then(setBookings)
       .catch((error) => console.error("Erro ao buscar agendamentos:", error));
   }, []);
 
-  const weekStart = useMemo(() => startOfWeek(new Date(), { weekStartsOn: 1 }), []);
-  const days = useMemo(() => Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)), [weekStart]);
+  const weekStart = useMemo(
+    () => startOfWeek(new Date(), { weekStartsOn: 1 }),
+    []
+  );
+  const days = useMemo(
+    () => Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)),
+    [weekStart]
+  );
 
   const generateColorById = (id) => {
-    const hash = Array.from(id).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const hash = Array.from(id).reduce(
+      (acc, char) => acc + char.charCodeAt(0),
+      0
+    );
     const hue = hash % 360;
     return `hsl(${hue}, 60%, 90%)`;
   };
@@ -111,7 +145,9 @@ const MobileSchedule = () => {
     <MobileAgendaWrapper>
       <TopButtons>
         <Button onClick={handleNewBooking}>+ Novo Agendamento</Button>
-        <Button danger onClick={handleLogout}>Sair</Button>
+        <Button danger onClick={handleLogout}>
+          Sair
+        </Button>
       </TopButtons>
 
       {days.map((day, i) => {
@@ -122,9 +158,7 @@ const MobileSchedule = () => {
 
         return (
           <DayCard key={i}>
-            <DayTitle>
-              {format(day, "EEEE, dd/MM", { locale: ptBR })}
-            </DayTitle>
+            <DayTitle>{format(day, "EEEE, dd/MM", { locale: ptBR })}</DayTitle>
 
             {dayBookings.length > 0 ? (
               dayBookings.map((b) => (
@@ -138,7 +172,9 @@ const MobileSchedule = () => {
                 </BookingItem>
               ))
             ) : (
-              <p style={{ fontSize: "0.8rem", color: "#9ca3af" }}>Sem agendamentos</p>
+              <p style={{ fontSize: "0.8rem", color: "#9ca3af" }}>
+                Sem agendamentos
+              </p>
             )}
           </DayCard>
         );
