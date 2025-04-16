@@ -163,11 +163,15 @@ const MobileSchedule = () => {
     <MobileAgendaWrapper>
       <HeaderSection>
         <WeekText>
-          📅 Semana de {format(weekStart, "dd/MM")} até {format(addDays(weekStart, 6), "dd/MM")}
+          📅 Semana de {format(weekStart, "dd/MM")} até{" "}
+          {format(addDays(weekStart, 6), "dd/MM")}
         </WeekText>
 
         <ButtonRow>
-          <Button onClick={() => setWeekOffset((prev) => prev - 1)} disabled={weekOffset === 0}>
+          <Button
+            onClick={() => setWeekOffset((prev) => prev - 1)}
+            disabled={weekOffset === 0}
+          >
             👈 Semana Anterior
           </Button>
           <Button onClick={() => setWeekOffset((prev) => prev + 1)}>

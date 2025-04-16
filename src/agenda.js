@@ -44,7 +44,7 @@ const Title = styled.h1`
 `;
 
 const NewBookingButton = styled.button`
-  background-color: #3b82f6;
+  background-color: #1e40af;
   color: white;
   padding: 0.5rem 1.25rem;
   border-radius: 0.5rem;
@@ -75,7 +75,7 @@ const NavigationGroup = styled.div`
 `;
 
 const BlueButton = styled.button`
-  background-color: #3b82f6;
+  background-color: #1e40af;
   color: white;
   padding: 0.45rem 1rem;
   border-radius: 0.5rem;

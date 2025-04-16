@@ -23,12 +23,22 @@ const Card = styled.div`
   transition: 0.3s;
 `;
 
-const Logo = styled.h1`
+const Logo = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
   font-size: 2rem;
   color: #1e293b;
   font-weight: bold;
   margin-bottom: 1.5rem;
+
+  img {
+    width: 40px;
+    height: auto;
+  }
 `;
+
 
 const Input = styled.input`
   width: 100%;
@@ -54,7 +64,7 @@ const Input = styled.input`
 
 const Button = styled.button`
   width: 100%;
-  background-color: #3b82f6;
+  background-color: #1e40af;
   color: white;
   padding: 0.75rem;
   font-size: 1rem;
@@ -112,7 +122,14 @@ export default function LoginPage({ onLogin }) {
   return (
     <Container>
       <Card>
-        <Logo>Volley Manager</Logo>
+        <Logo>
+          <img
+            src="/favicon.ico"
+            alt="Logo Volley Manager"
+            style={{ width: "102px", marginRight: "0.5rem" }}
+          />
+          Sporting Manager
+        </Logo>
         <FormWrapper onSubmit={handleSubmit}>
           {error && <ErrorMessage>{error}</ErrorMessage>}
           <Input
