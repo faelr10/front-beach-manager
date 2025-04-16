@@ -7,7 +7,8 @@ export async function login(email, password) {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include", // permite salvar o cookie HttpOnly do refresh token
+      // ❌ REMOVIDO: não precisa mais enviar cookies
+      // credentials: "include",
       body: JSON.stringify({ email, password }),
     });
 
@@ -18,8 +19,9 @@ export async function login(email, password) {
 
     const data = await response.json();
 
-    // Armazena apenas o access token no localStorage
+    // ✅ Armazena o access token e o refresh token no localStorage
     localStorage.setItem("token", data.token);
+    localStorage.setItem("refresh_token", data.refresh_token);
 
     return data;
   } catch (error) {

@@ -2,9 +2,14 @@ const API_URL = "https://beach-manager-api.onrender.com"; // URL da API
 
 export async function refreshToken() {
   try {
+    const refreshToken = localStorage.getItem("refresh_token");
+
     const response = await fetch(`${API_URL}/auth/refresh-token`, {
       method: "POST",
-      credentials: "include", // envia o cookie com refresh_token
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ refresh_token: refreshToken }),
     });
 
     if (!response.ok) {
