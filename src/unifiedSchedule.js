@@ -13,27 +13,47 @@ const MobileAgendaWrapper = styled.div`
   min-height: 100vh;
 `;
 
-const TopButtons = styled.div`
+const HeaderSection = styled.div`
+  text-align: center;
+  margin-bottom: 1rem;
+`;
+
+const WeekText = styled.p`
+  font-size: 1rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 0.8rem;
+`;
+
+const ButtonRow = styled.div`
   display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  margin-top: 0.5rem;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
 `;
 
 const Button = styled.button`
   flex: 1;
-  padding: 0.85rem 1rem;
-  background-color: ${(props) => (props.danger ? "#ef4444" : "#3b82f6")};
+  min-width: 130px;
+  padding: 0.75rem 1rem;
+  background-color: ${(props) =>
+    props.danger ? "#ef4444" : props.secondary ? "#3b82f6" : "#2563eb"};
   color: white;
   border: none;
-  border-radius: 0.5rem;
-  font-size: 0.95rem;
+  border-radius: 0.75rem;
+  font-size: 0.9rem;
   font-weight: bold;
   cursor: pointer;
 
   &:hover {
-    background-color: ${(props) => (props.danger ? "#dc2626" : "#2563eb")};
+    background-color: ${(props) =>
+      props.danger ? "#dc2626" : props.secondary ? "#2563eb" : "#1d4ed8"};
+  }
+
+  &:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
   }
 `;
 
@@ -83,13 +103,11 @@ const MobileSchedule = () => {
   const [bookings, setBookings] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
+  const [weekOffset, setWeekOffset] = useState(0);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
-        console.log("📱 Retornou à aba, recarregando dados...");
-
-        // Espera 1 segundo para garantir que o backend do Render já acordou
         setTimeout(() => {
           getAllAgendas()
             .then(setBookings)
@@ -101,7 +119,6 @@ const MobileSchedule = () => {
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
-
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
@@ -114,9 +131,10 @@ const MobileSchedule = () => {
   }, []);
 
   const weekStart = useMemo(
-    () => startOfWeek(new Date(), { weekStartsOn: 1 }),
-    []
+    () => startOfWeek(addDays(new Date(), weekOffset * 7), { weekStartsOn: 1 }),
+    [weekOffset]
   );
+
   const days = useMemo(
     () => Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)),
     [weekStart]
@@ -143,12 +161,29 @@ const MobileSchedule = () => {
 
   return (
     <MobileAgendaWrapper>
-      <TopButtons>
-        <Button onClick={handleNewBooking}>+ Novo Agendamento</Button>
-        <Button danger onClick={handleLogout}>
-          Sair
-        </Button>
-      </TopButtons>
+      <HeaderSection>
+        <WeekText>
+          📅 Semana de {format(weekStart, "dd/MM")} até {format(addDays(weekStart, 6), "dd/MM")}
+        </WeekText>
+
+        <ButtonRow>
+          <Button onClick={() => setWeekOffset((prev) => prev - 1)} disabled={weekOffset === 0}>
+            👈 Semana Anterior
+          </Button>
+          <Button onClick={() => setWeekOffset((prev) => prev + 1)}>
+            👉 Próxima Semana
+          </Button>
+        </ButtonRow>
+
+        <ButtonRow>
+          <Button onClick={handleNewBooking} secondary>
+            + Novo Agendamento
+          </Button>
+          <Button onClick={handleLogout} danger>
+            Sair
+          </Button>
+        </ButtonRow>
+      </HeaderSection>
 
       {days.map((day, i) => {
         const dayString = format(day, "yyyy-MM-dd");
@@ -159,7 +194,6 @@ const MobileSchedule = () => {
         return (
           <DayCard key={i}>
             <DayTitle>{format(day, "EEEE, dd/MM", { locale: ptBR })}</DayTitle>
-
             {dayBookings.length > 0 ? (
               dayBookings.map((b) => (
                 <BookingItem
