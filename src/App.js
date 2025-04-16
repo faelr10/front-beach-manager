@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import LoginPage from "./loginPage";
 import MobileSchedule from "./unifiedSchedule";
 import PublicSchedule from "./publicSchedule";
+import Footer from "./footer";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -73,6 +74,7 @@ function App() {
         <Route path="/agenda-publica" element={<PublicSchedule />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
+      <Footer />
     </Router>
   );
 }
