@@ -7,6 +7,7 @@ import BookingModal from "./bookingModal";
 import EditBookingModal from "./editBookingModal";
 import VolleyballCourtBooking from "./agenda";
 
+// ESTILOS
 const MobileAgendaWrapper = styled.div`
   padding: 1.5rem 1rem 1rem;
   background-color: #f0f4ff;
@@ -83,6 +84,23 @@ const BookingItem = styled.div`
   cursor: pointer;
 `;
 
+const Spinner = styled.div`
+  margin: 4rem auto;
+  border: 6px solid #e5e7eb;
+  border-top: 6px solid #3b82f6;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+// HOOK MEDIA QUERY
 const useMediaQuery = (query) => {
   const [matches, setMatches] = useState(
     () => window.matchMedia(query).matches
@@ -98,23 +116,33 @@ const useMediaQuery = (query) => {
   return matches;
 };
 
+// COMPONENTE PRINCIPAL
 const MobileSchedule = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const [bookings, setBookings] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [weekOffset, setWeekOffset] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  const fetchAgendas = () => {
+    setLoading(true);
+    getAllAgendas()
+      .then(setBookings)
+      .catch((error) =>
+        console.error("Erro ao buscar agendamentos:", error)
+      )
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchAgendas();
+  }, []);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
-        setTimeout(() => {
-          getAllAgendas()
-            .then(setBookings)
-            .catch((error) =>
-              console.error("Erro ao recarregar agendamentos:", error)
-            );
-        }, 1000);
+        setTimeout(() => fetchAgendas(), 1000);
       }
     };
 
@@ -122,12 +150,6 @@ const MobileSchedule = () => {
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, []);
-
-  useEffect(() => {
-    getAllAgendas()
-      .then(setBookings)
-      .catch((error) => console.error("Erro ao buscar agendamentos:", error));
   }, []);
 
   const weekStart = useMemo(
@@ -158,6 +180,23 @@ const MobileSchedule = () => {
   const handleEditBooking = (booking) => setSelectedBooking(booking);
 
   if (!isMobile) return <VolleyballCourtBooking />;
+
+  if (loading) {
+    return (
+      <MobileAgendaWrapper>
+        <HeaderSection>
+          <WeekText>
+            📅 Semana de {format(weekStart, "dd/MM")} até{" "}
+            {format(addDays(weekStart, 6), "dd/MM")}
+          </WeekText>
+        </HeaderSection>
+        <Spinner />
+        <p style={{ textAlign: "center", color: "#6b7280" }}>
+          Carregando agendamentos...
+        </p>
+      </MobileAgendaWrapper>
+    );
+  }
 
   return (
     <MobileAgendaWrapper>
