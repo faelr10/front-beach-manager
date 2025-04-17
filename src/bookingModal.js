@@ -129,36 +129,45 @@ export default function BookingModal({ bookings, setBookings, onClose }) {
       setError("Preencha todos os campos obrigatórios.");
       return;
     }
-
+  
     if (formData.start_time >= formData.end_time) {
       setError("Horário final deve ser após o horário inicial.");
       return;
     }
-
+  
     if (isOverlapping()) {
       setError("Este horário já está ocupado. Escolha outro.");
       return;
     }
-
+  
     const newBooking = {
       client_name: formData.client_name,
       date: formData.date,
       start_time: formData.start_time,
       end_time: formData.end_time,
     };
-    onClose();
-
-    setError("");
-
+  
+    setError(""); // limpa erro anterior
+  
     try {
       const created = await createAgenda(newBooking);
-
       setBookings((prev) => [...prev, created]);
+      onClose(); // agora só fecha se tudo deu certo
     } catch (error) {
-      console.error("Erro ao criar agendamento:", error.message);
-      setError("Erro ao salvar agendamento. Tente novamente.");
+      console.error("Erro ao criar agendamento:", error);
+  
+      if (
+        error.status === 409 || // backend usando 409 Conflict
+        error.body === "agenda conflict" || // plain text
+        error.message === "agenda conflict"
+      ) {
+        setError("Este horário já está ocupado. Escolha outro.");
+      } else {
+        setError("Este horário já está ocupado. Atualize a página e escolha outro.");
+      }
     }
   };
+  
 
   const isOverlapping = () => {
     const { date, start_time, end_time } = formData;

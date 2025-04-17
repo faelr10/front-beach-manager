@@ -1,7 +1,7 @@
 import { refreshToken } from "./refreshToken";
 
 const API_URL = "https://beach-manager-api.onrender.com";
-// const API_URL = "http://localhost:8082";
+//const API_URL = "http://localhost:8082";
 
 export async function authFetch(endpoint, options = {}) {
   const token = localStorage.getItem("token");
@@ -18,7 +18,7 @@ export async function authFetch(endpoint, options = {}) {
       ...options.headers,
     },
     body: options.body ? JSON.stringify(options.body) : undefined,
-    credentials: "include", // envia cookies (refresh_token)
+    credentials: "include",
   };
 
   try {
@@ -30,31 +30,28 @@ export async function authFetch(endpoint, options = {}) {
         throw new Error("Sessão expirada. Faça login novamente.");
       }
 
-      // Retry com novo token
       const newToken = localStorage.getItem("token");
       config.headers.Authorization = `Bearer ${newToken}`;
       response = await fetch(`${API_URL}${endpoint}`, config);
     }
 
     if (!response.ok) {
-      // Tenta ler a mensagem de erro, se existir
       let errorMessage = "Erro ao fazer requisição";
       try {
-        const errorData = await response.json();
-        errorMessage = errorData.message || errorMessage;
-      } catch (_) {
-        // ignora se não tiver JSON no erro
-      }
-      throw new Error(errorMessage);
+        const errorData = await response.text(); // como o backend retorna string
+        errorMessage = errorData || errorMessage;
+      } catch (_) {}
+
+      const error = new Error(errorMessage);
+      error.status = response.status;
+      error.body = errorMessage;
+      throw error;
     }
 
-    // Trata 204 No Content
-    if (response.status === 204) {
-      return null;
-    }
+    if (response.status === 204) return null;
 
     return await response.json();
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
   }
 }
