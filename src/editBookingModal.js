@@ -156,6 +156,7 @@ export default function EditBookingModal({
       prev.map((b) => (b.id === booking.id ? { ...b, ...formData } : b))
     );
 
+    onClose();
     setError("");
     console.log("Agendamento atualizado:", formData);
 
@@ -165,8 +166,6 @@ export default function EditBookingModal({
       setError("Erro ao salvar na API.");
       return;
     }
-
-    onClose();
   };
 
   const handleDelete = async () => {

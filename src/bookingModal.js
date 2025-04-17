@@ -146,6 +146,7 @@ export default function BookingModal({ bookings, setBookings, onClose }) {
       start_time: formData.start_time,
       end_time: formData.end_time,
     };
+    onClose();
 
     setError("");
 
@@ -153,7 +154,6 @@ export default function BookingModal({ bookings, setBookings, onClose }) {
       const created = await createAgenda(newBooking);
 
       setBookings((prev) => [...prev, created]);
-      onClose();
     } catch (error) {
       console.error("Erro ao criar agendamento:", error.message);
       setError("Erro ao salvar agendamento. Tente novamente.");
