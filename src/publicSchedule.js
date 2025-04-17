@@ -3,8 +3,8 @@ import React, { useEffect, useState, useMemo } from "react";
 import styled from "styled-components";
 import { format, addDays, startOfWeek } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { getAllAgendas } from "./services/getAllAgendas";
 import { useParams } from "react-router-dom"; // <-- Importar o hook
+import { getAllAgendasPublic } from "./services/getAllAgendasPublic";
 
 const Wrapper = styled.div`
   padding: 1.5rem 1rem;
@@ -49,7 +49,7 @@ const PublicSchedule = () => {
 
   useEffect(() => {
     if (!id) return;
-    getAllAgendas(id)
+    getAllAgendasPublic(id)
       .then(setBookings)
       .catch((error) => console.error("Erro ao buscar agendamentos:", error));
   }, [id]);
