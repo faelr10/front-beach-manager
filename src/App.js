@@ -30,21 +30,21 @@ function App() {
     return !!localStorage.getItem("token");
   });
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetch("https://beach-manager-api.onrender.com/ping")
-        .then((res) => res.text())
-        .then((text) => console.log("✅ Backend respondendo:", text))
-        .catch((err) => console.error("❌ Erro ao pingar:", err));
-    }, 60000);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     fetch("https://beach-manager-api.onrender.com/ping")
+  //       .then((res) => res.text())
+  //       .then((text) => console.log("✅ Backend respondendo:", text))
+  //       .catch((err) => console.error("❌ Erro ao pingar:", err));
+  //   }, 60000);
 
-    fetch("https://beach-manager-api.onrender.com/ping")
-      .then((res) => res.text())
-      .then((text) => console.log("✅ Backend inicial:", text))
-      .catch((err) => console.error("❌ Erro inicial:", err));
+  //   fetch("https://beach-manager-api.onrender.com/ping")
+  //     .then((res) => res.text())
+  //     .then((text) => console.log("✅ Backend inicial:", text))
+  //     .catch((err) => console.error("❌ Erro inicial:", err));
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
