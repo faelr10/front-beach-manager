@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { format, addDays, startOfWeek } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { getAllAgendas } from "./services/getAllAgendas";
+import { useParams } from "react-router-dom"; // <-- Importar o hook
 
 const Wrapper = styled.div`
   padding: 1.5rem 1rem;
@@ -43,13 +44,15 @@ const BookingItem = styled.div`
 `;
 
 const PublicSchedule = () => {
+  const { id } = useParams(); // <-- Pega o id da URL
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    getAllAgendas()
+    if (!id) return;
+    getAllAgendas(id)
       .then(setBookings)
       .catch((error) => console.error("Erro ao buscar agendamentos:", error));
-  }, []);
+  }, [id]);
 
   const weekStart = useMemo(
     () => startOfWeek(new Date(), { weekStartsOn: 1 }),
@@ -76,7 +79,9 @@ const PublicSchedule = () => {
             {dayBookings.length > 0 ? (
               dayBookings.map((b) => (
                 <BookingItem key={b.id}>
-                  <strong>{b.start_time} - {b.end_time}</strong>
+                  <strong>
+                    {b.start_time} - {b.end_time}
+                  </strong>
                 </BookingItem>
               ))
             ) : (

@@ -75,7 +75,7 @@ function App() {
               )
             }
           />
-          <Route path="/agenda-publica" element={<PublicSchedule />} />
+          <Route path="/agenda-publica/:id" element={<PublicSchedule />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Layout>
