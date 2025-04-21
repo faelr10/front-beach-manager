@@ -36,7 +36,7 @@ const Header = ({ userName }) => {
     <HeaderWrapper>
       <Title>
         <FaCalendarAlt />
-        Beach Manager
+        Sporting Manager
       </Title>
       {userName && <UserInfo>👤 {userName}</UserInfo>}
     </HeaderWrapper>
