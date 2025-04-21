@@ -110,15 +110,16 @@ const timeOptions = Array.from({ length: 33 }, (_, i) => {
   return `${hour.toString().padStart(2, "0")}:${minute}`;
 });
 
-export default function BookingModal({ bookings, setBookings, onClose }) {
+export default function BookingModal({ bookings, setBookings, onClose, initialDate }) {
   const [formData, setFormData] = useState({
     client_name: "",
     phone: "",
-    date: "",
+    date: initialDate || "",
     start_time: "",
     end_time: "",
     recurring: false,
   });
+  
   const [error, setError] = useState("");
 
   const handleChange = (e) =>

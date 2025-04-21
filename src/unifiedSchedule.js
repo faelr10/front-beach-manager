@@ -71,6 +71,7 @@ const DayTitle = styled.h2`
   font-weight: bold;
   margin-bottom: 0.5rem;
   color: #1f2937;
+  cursor: pointer;
 `;
 
 const BookingItem = styled.div`
@@ -100,11 +101,8 @@ const Spinner = styled.div`
   }
 `;
 
-// HOOK MEDIA QUERY
 const useMediaQuery = (query) => {
-  const [matches, setMatches] = useState(
-    () => window.matchMedia(query).matches
-  );
+  const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
 
   useEffect(() => {
     const media = window.matchMedia(query);
@@ -122,6 +120,7 @@ const MobileSchedule = () => {
   const [bookings, setBookings] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [weekOffset, setWeekOffset] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -129,9 +128,7 @@ const MobileSchedule = () => {
     setLoading(true);
     getAllAgendas()
       .then(setBookings)
-      .catch((error) =>
-        console.error("Erro ao buscar agendamentos:", error)
-      )
+      .catch((error) => console.error("Erro ao buscar agendamentos:", error))
       .finally(() => setLoading(false));
   };
 
@@ -176,7 +173,16 @@ const MobileSchedule = () => {
     window.location.href = "/login";
   };
 
-  const handleNewBooking = () => setShowModal(true);
+  const handleNewBooking = () => {
+    setSelectedDate(null);
+    setShowModal(true);
+  };
+
+  const handleNewBookingWithDate = (date) => {
+    setSelectedDate(date);
+    setShowModal(true);
+  };
+
   const handleEditBooking = (booking) => setSelectedBooking(booking);
 
   if (!isMobile) return <VolleyballCourtBooking />;
@@ -236,7 +242,9 @@ const MobileSchedule = () => {
 
         return (
           <DayCard key={i}>
-            <DayTitle>{format(day, "EEEE, dd/MM", { locale: ptBR })}</DayTitle>
+            <DayTitle onClick={() => handleNewBookingWithDate(dayString)}>
+              {format(day, "EEEE, dd/MM", { locale: ptBR })}
+            </DayTitle>
             {dayBookings.length > 0 ? (
               dayBookings.map((b) => (
                 <BookingItem
@@ -261,7 +269,11 @@ const MobileSchedule = () => {
         <BookingModal
           bookings={bookings}
           setBookings={setBookings}
-          onClose={() => setShowModal(false)}
+          onClose={() => {
+            setShowModal(false);
+            setSelectedDate(null);
+          }}
+          initialDate={selectedDate}
         />
       )}
 
