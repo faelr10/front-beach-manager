@@ -102,7 +102,9 @@ const Spinner = styled.div`
 `;
 
 const useMediaQuery = (query) => {
-  const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
+  const [matches, setMatches] = useState(
+    () => window.matchMedia(query).matches
+  );
 
   useEffect(() => {
     const media = window.matchMedia(query);
@@ -213,10 +215,7 @@ const MobileSchedule = () => {
         </WeekText>
 
         <ButtonRow>
-          <Button
-            onClick={() => setWeekOffset((prev) => prev - 1)}
-            disabled={weekOffset === 0}
-          >
+          <Button onClick={() => setWeekOffset((prev) => prev - 1)}>
             👈 Semana Anterior
           </Button>
           <Button onClick={() => setWeekOffset((prev) => prev + 1)}>
