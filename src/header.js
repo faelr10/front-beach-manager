@@ -1,7 +1,8 @@
 // Header.js
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FaCalendarAlt } from "react-icons/fa";
+import { getUserById } from "./services/getUserById";
 
 const HeaderWrapper = styled.header`
   background-color: #1e3a8a; /* azul petróleo */
@@ -26,19 +27,34 @@ const Title = styled.h1`
   }
 `;
 
-const UserInfo = styled.div`
-  font-size: 0.85rem;
-  opacity: 0.9;
-`;
+const Header = () => {
+  const [userName, setUserName] = useState("");
 
-const Header = ({ userName }) => {
+  async function fetchUserToHeader() {
+    try {
+      const user_id = localStorage.getItem("user_id");
+      if (!user_id) {
+        console.error("User ID not found in localStorage");
+        return;
+      }
+
+      const res = await getUserById(user_id);
+      setUserName(res.local_name);
+    } catch (err) {
+      console.error("Failed to fetch user:", err);
+    }
+  }
+
+  useEffect(() => {
+    fetchUserToHeader();
+  }, []);
+
   return (
     <HeaderWrapper>
       <Title>
         <FaCalendarAlt />
-        Sporting Manager
+        Sporting Manager - {userName}
       </Title>
-      {userName && <UserInfo>👤 {userName}</UserInfo>}
     </HeaderWrapper>
   );
 };

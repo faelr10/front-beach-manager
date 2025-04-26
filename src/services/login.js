@@ -22,6 +22,7 @@ export async function login(email, password) {
     // ✅ Armazena o access token e o refresh token no localStorage
     localStorage.setItem("token", data.token);
     localStorage.setItem("refresh_token", data.refresh_token);
+    localStorage.setItem("user_id",data.id);
 
     return data;
   } catch (error) {
