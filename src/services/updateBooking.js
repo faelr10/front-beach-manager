@@ -4,7 +4,7 @@ import { authFetch } from "./authFetch";
 export async function updateBookingAPI(id, data) {
   try {
     const response = await authFetch(`/schedule/${id}`, {
-      method: "PUT",
+      method: "PATCH",
       body: data,
     });
 
