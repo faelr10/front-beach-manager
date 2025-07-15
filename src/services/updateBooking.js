@@ -10,7 +10,7 @@ export async function updateBookingAPI(id, data) {
 
     return response;
   } catch (error) {
-    console.error("Erro ao atualizar o agendamento:", error);
+    console.error("Erro ao atualizar o agendamento::", error);
     throw error;
   }
 }
