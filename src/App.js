@@ -12,10 +12,11 @@ import MobileSchedule from "./unifiedSchedule";
 import PublicSchedule from "./publicSchedule";
 import Footer from "./footer";
 import Header from "./header";
+import CadastroPage from "./cadastroPage";
 
 function Layout({ children }) {
   const location = useLocation();
-  const hideLayout = location.pathname === "/login";
+  const hideLayout = location.pathname === "/login" || location.pathname === "/cadastro";
 
   return (
     <>
@@ -65,6 +66,7 @@ function App() {
               )
             }
           />
+
           <Route
             path="/agendamento"
             element={
@@ -75,6 +77,9 @@ function App() {
               )
             }
           />
+
+          <Route path="/cadastro" element={<CadastroPage />} />
+
           <Route path="/agenda-publica/:id" element={<PublicSchedule />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>

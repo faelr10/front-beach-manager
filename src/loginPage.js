@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { login } from "./services/login";
+import { Link } from "react-router-dom"; // 👈 import do Link
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 88vh;
   background-color: #f1f5f9;
   font-family: "Segoe UI", sans-serif;
   padding: 1rem;
@@ -38,7 +39,6 @@ const Logo = styled.div`
     height: auto;
   }
 `;
-
 
 const Input = styled.input`
   width: 100%;
@@ -145,6 +145,12 @@ export default function LoginPage({ onLogin }) {
             onChange={(e) => setPassword(e.target.value)}
           />
           <Button type="submit">Entrar</Button>
+          <Link
+            to="/cadastro"
+            style={{ marginTop: "1rem", fontSize: "0.9rem", color: "#1e40af" }}
+          >
+            Cadastre-se
+          </Link>
         </FormWrapper>
       </Card>
     </Container>
