@@ -2,5 +2,6 @@
 import { authFetch } from "./authFetch";
 
 export async function getAllAgendas() {
-  return authFetch("/schedule");
+  const userId = localStorage.getItem("userId");
+  return authFetch(`/schedule/${userId}`);
 }
