@@ -2,5 +2,5 @@
 import { authFetch } from "./authFetch";
 
 export async function getAllAgendas() {
-  return authFetch("/agendas");
+  return authFetch("/schedule");
 }

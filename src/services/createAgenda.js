@@ -2,7 +2,7 @@
 import { authFetch } from "./authFetch";
 
 export async function createAgenda(agendaData) {
-  return authFetch("/agendas", {
+  return authFetch("/schedule", {
     method: "POST",
     body: agendaData,
   });

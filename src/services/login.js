@@ -1,4 +1,4 @@
-const API_URL = "https://beach-manager-api.onrender.com";
+const API_URL = "https://sporting-manager-api.onrender.com";
 
 export async function login(email, password) {
   try {

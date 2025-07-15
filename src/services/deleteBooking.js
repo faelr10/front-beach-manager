@@ -3,7 +3,7 @@ import { authFetch } from "./authFetch";
 
 export async function deleteBookingAPI(id) {
   try {
-    const response = await authFetch(`/agendas/${id}`, {
+    const response = await authFetch(`/schedule/${id}`, {
       method: "DELETE",
     });
 

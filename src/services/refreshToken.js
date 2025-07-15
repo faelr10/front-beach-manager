@@ -1,4 +1,4 @@
-const API_URL = "https://beach-manager-api.onrender.com"; // URL da API
+const API_URL = "https://sporting-manager-api.onrender.com"; // URL da API
 
 export async function refreshToken() {
   try {
