@@ -53,7 +53,7 @@ const Header = () => {
     <HeaderWrapper>
       <Title>
         <FaCalendarAlt />
-        Sporting Manager - {userName}
+        {userName}
       </Title>
     </HeaderWrapper>
   );
