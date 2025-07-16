@@ -1,7 +1,7 @@
 // src/Footer.js
 import React from "react";
 import styled from "styled-components";
-import { FaEnvelope, FaGithub } from "react-icons/fa";
+import { FaEnvelope, FaWhatsapp, FaWhatsappSquare } from "react-icons/fa";
 
 const FooterWrapper = styled.footer`
   background-color: #f0f4ff;
@@ -42,10 +42,16 @@ const Footer = () => {
       <div>Desenvolvido por RealLabs</div>
       <ContactInfo>
         <a href="mailto:real-labs@hotmail.com">
-          <FaEnvelope /> real-labs@hotmail.com
+          <FaEnvelope />
+          real-labs@hotmail.com
         </a>
-        <a href="https://github.com/faelr10" target="_blank" rel="noopener noreferrer">
-          <FaGithub /> GitHub
+        <a
+          href="https://api.whatsapp.com/send?phone=5531982964716"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <FaWhatsapp />
+          WhatsApp
         </a>
       </ContactInfo>
     </FooterWrapper>
