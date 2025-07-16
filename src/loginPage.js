@@ -8,9 +8,14 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: 88vh;
-  background-color: #f1f5f9;
   font-family: "Segoe UI", sans-serif;
   padding: 1rem;
+  background-image: url("/fundo-quadra.png"); /* <-- Mude aqui! */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 98vh;
 `;
 
 const Card = styled.div`
@@ -22,6 +27,7 @@ const Card = styled.div`
   max-width: 400px;
   text-align: center;
   transition: 0.3s;
+  height: 45%;
 `;
 
 const Logo = styled.div`

@@ -39,10 +39,10 @@ const ContactInfo = styled.div`
 const Footer = () => {
   return (
     <FooterWrapper>
-      <div>Desenvolvido por Rafael Victor Boscato</div>
+      <div>Desenvolvido por RealLabs</div>
       <ContactInfo>
-        <a href="mailto:rafaelv.boscato@gmail.com">
-          <FaEnvelope /> rafaelv.boscato@hotmail.com
+        <a href="mailto:real-labs@hotmail.com">
+          <FaEnvelope /> real-labs@hotmail.com
         </a>
         <a href="https://github.com/faelr10" target="_blank" rel="noopener noreferrer">
           <FaGithub /> GitHub
