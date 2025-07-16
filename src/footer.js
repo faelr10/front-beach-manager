@@ -51,7 +51,7 @@ const Footer = () => {
           rel="noopener noreferrer"
         >
           <FaWhatsapp />
-          WhatsApp
+          Suporte
         </a>
       </ContactInfo>
     </FooterWrapper>
