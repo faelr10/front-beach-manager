@@ -27,7 +27,7 @@ const Card = styled.div`
   max-width: 400px;
   text-align: center;
   transition: 0.3s;
-  height: 55%;
+  height: 60%;
 `;
 
 const Logo = styled.div`
