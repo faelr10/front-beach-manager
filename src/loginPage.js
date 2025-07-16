@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { login } from "./services/login";
-import { Link } from "react-router-dom"; // 👈 import do Link
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -10,7 +10,7 @@ const Container = styled.div`
   height: 88vh;
   font-family: "Segoe UI", sans-serif;
   padding: 1rem;
-  background-image: url("/fundo-quadra.png"); /* <-- Mude aqui! */
+  background-image: url("/fundo-quadra.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -27,7 +27,7 @@ const Card = styled.div`
   max-width: 400px;
   text-align: center;
   transition: 0.3s;
-  height: 45%;
+  height: 55%;
 `;
 
 const Logo = styled.div`
@@ -46,10 +46,25 @@ const Logo = styled.div`
   }
 `;
 
-const Input = styled.input`
+const InputWrapper = styled.div`
   width: 100%;
-  padding: 0.75rem 1rem;
   margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+const Label = styled.label`
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.3rem;
+  user-select: none;
+`;
+
+const Input = styled.input`
+  width: 90%;
+  padding: 0.75rem 1rem;
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;
   font-size: 1rem;
@@ -99,9 +114,31 @@ const ErrorMessage = styled.div`
 const FormWrapper = styled.form`
   display: flex;
   flex-direction: column;
-  align-items: center; /* centraliza os filhos */
-  gap: 1rem;
+  align-items: center;
+  gap: 0.75rem;
 `;
+
+const ButtonLink = styled(Link)`
+  width: 93%; /* Já está 100% */
+  color: white;
+  padding: 0.75rem;
+  color: #1e40af; /* Cor do texto azul */
+  border: 1px solid #1e40af; /* Borda com a mesma cor do texto */
+
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-top: 0.5rem; /* Ajuste aqui se precisar de mais espaço */
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: #1e40af;
+    color: white; /* Texto branco no hover */
+  }
+`;
+
+// --- Fim do novo componente ---
 
 export default function LoginPage({ onLogin }) {
   const [email, setEmail] = useState("");
@@ -131,32 +168,42 @@ export default function LoginPage({ onLogin }) {
         <Logo>
           <img
             src="/favicon.ico"
-            alt="Logo Volley Manager"
+            alt="Logo Sporting Manager"
             style={{ width: "102px", marginRight: "0.5rem" }}
           />
           Sporting Manager
         </Logo>
         <FormWrapper onSubmit={handleSubmit}>
           {error && <ErrorMessage>{error}</ErrorMessage>}
-          <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Input
-            type="password"
-            placeholder="Senha"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+
+          <InputWrapper>
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="Digite seu email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+            />
+          </InputWrapper>
+
+          <InputWrapper>
+            <Label htmlFor="password">Senha</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="Digite sua senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+            />
+          </InputWrapper>
+
           <Button type="submit">Entrar</Button>
-          <Link
-            to="/cadastro"
-            style={{ marginTop: "1rem", fontSize: "0.9rem", color: "#1e40af" }}
-          >
-            Cadastre-se
-          </Link>
+
+          {/* Substituído o Link padrão pelo ButtonLink estilizado */}
+          <ButtonLink to="/cadastro">Cadastre-se</ButtonLink>
         </FormWrapper>
       </Card>
     </Container>
