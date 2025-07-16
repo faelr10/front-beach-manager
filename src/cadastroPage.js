@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Importe useEffect
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { createUser } from "./services/createUser";
 
+// Componentes já existentes (sem alterações aqui)
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -11,7 +12,7 @@ const Container = styled.div`
   font-family: "Segoe UI", sans-serif;
   padding: 1rem;
 
-  background-image: url("/fundo-quadra.png"); /* <-- Mude aqui! */
+  background-image: url("/fundo-quadra.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -46,7 +47,6 @@ const Logo = styled.div`
   }
 `;
 
-// Agrupe Label + Input num wrapper alinhado verticalmente
 const InputWrapper = styled.div`
   width: 100%;
   margin-bottom: 1rem;
@@ -84,21 +84,25 @@ const Input = styled.input`
   }
 `;
 
+// Ajuste no botão para lidar com o estado desabilitado
 const Button = styled.button`
   width: 100%;
-  background-color: #1e40af;
+  background-color: ${(props) =>
+    props.disabled ? "#9ca3af" : "#1e40af"}; /* Cor cinza se desabilitado */
   color: white;
   padding: 0.75rem;
   font-size: 1rem;
   font-weight: 600;
   border: none;
   border-radius: 0.5rem;
-  cursor: pointer;
+  cursor: ${(props) =>
+    props.disabled ? "not-allowed" : "pointer"}; /* Cursor diferente */
   margin-top: 0.5rem;
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: #2563eb;
+    background-color: ${(props) =>
+      props.disabled ? "#9ca3af" : "#2563eb"}; /* Sem hover se desabilitado */
   }
 `;
 
@@ -152,11 +156,52 @@ export default function CadastroPage() {
 
   const navigate = useNavigate();
 
+  // Função de validação da senha simplificada
+  const validatePassword = (password) => {
+    // Retorna true se a senha cumprir TODOS os requisitos, false caso contrário.
+    const hasMinLength = password.length >= 6;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]/.test(
+      password
+    );
+
+    return (
+      hasMinLength &&
+      hasUpperCase &&
+      hasLowerCase &&
+      hasNumber &&
+      hasSpecialChar
+    );
+  };
+
+  // useEffect para controlar o estado de `isButtonDisabled`
+  useEffect(() => {
+    const isPasswordValid = validatePassword(senha);
+
+    // O botão estará habilitado apenas se todos os campos estiverem preenchidos E a senha for válida
+
+    // Limpa o erro de senha se a senha se tornar válida
+    if (isPasswordValid && error.includes("A senha deve")) {
+      setError("");
+    }
+  }, [nome, email, senha, quadra, error]); // Dependências: re-executa sempre que esses estados mudam
+
   const handleCadastro = async (e) => {
     e.preventDefault();
+    setError(""); // Limpa erros anteriores ao tentar novo cadastro
 
     if (!nome || !email || !senha || !quadra) {
       setError("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    // Se a senha não for válida, exibe a mensagem de erro genérica e interrompe
+    if (!validatePassword(senha)) {
+      setError(
+        "A senha deve conter pelo menos 6 caracteres, incluindo letras maiúsculas, minúsculas, números e caracteres especiais."
+      );
       return;
     }
 
@@ -169,16 +214,11 @@ export default function CadastroPage() {
 
     try {
       await createUser(newUser);
-    } catch (error) {
-      setError(error);
+      setIsSuccess(true);
+    } catch (apiError) {
+      console.error("Erro ao cadastrar usuário:", apiError);
+      setError("E-mail já cadastrado.");
     }
-
-    // Aqui pode adicionar validações extras...
-
-    setError("");
-    console.log({ nome, email, senha, quadra });
-    setIsSuccess(true);
-    //navigate("/login"); // <-- redireciona para /login após sucesso
   };
 
   if (isSuccess) {
