@@ -13,6 +13,12 @@ const HeaderWrapper = styled.header`
   justify-content: space-between;
   border-bottom: 3px solid #1e40af;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  //se for mobile alinha ao centro
+  @media (max-width: 768px) {
+    justify-content: center;
+    text-align: center;
+  }
 `;
 
 const Title = styled.h1`
@@ -52,7 +58,12 @@ const Header = () => {
   return (
     <HeaderWrapper>
       <Title>
-        <FaCalendarAlt />
+        {/* <FaCalendarAlt /> */}
+        <img
+          src="/logo-sm-remove.png"
+          alt="Logo Sporting Manager"
+          style={{ width: "118px" }}
+        />
         {userName}
       </Title>
     </HeaderWrapper>

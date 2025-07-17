@@ -310,9 +310,9 @@ export default function LoginPage({ onLogin }) {
       <Card>
         <Logo>
           <img
-            src="/favicon.ico"
+            src="/logo-sm-remove.png"
             alt="Logo Sporting Manager"
-            style={{ width: "102px", marginRight: "0.5rem" }}
+            style={{ width: "118px"}}
           />
           Sporting Manager
         </Logo>
