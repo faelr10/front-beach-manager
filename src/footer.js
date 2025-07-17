@@ -1,7 +1,7 @@
 // src/Footer.js
 import React from "react";
 import styled from "styled-components";
-import { FaEnvelope, FaWhatsapp, FaWhatsappSquare } from "react-icons/fa";
+import { FaEnvelope, FaWhatsapp } from "react-icons/fa";
 
 const FooterWrapper = styled.footer`
   background-color: #f0f4ff;
