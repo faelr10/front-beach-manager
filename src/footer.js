@@ -41,9 +41,9 @@ const Footer = () => {
     <FooterWrapper>
       <div>Desenvolvido por RealLabs</div>
       <ContactInfo>
-        <a href="mailto:real-labs@hotmail.com">
+        <a href="mailto:sportingsmanager@gmail.com">
           <FaEnvelope />
-          real-labs@hotmail.com
+          sportingsmanager@gmail.com
         </a>
         <a
           href="https://api.whatsapp.com/send?phone=5531982964716"
