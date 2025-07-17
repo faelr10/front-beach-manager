@@ -236,7 +236,11 @@ export default function CadastroPage() {
     <Container>
       <Card>
         <Logo>
-          <img src="/favicon.ico" alt="Logo" />
+          <img
+            src="/logo-sm-remove.png"
+            alt="Logo Sporting Manager"
+            style={{ width: "118px"}}
+          />
           Cadastro
         </Logo>
         <FormWrapper onSubmit={handleCadastro}>
