@@ -290,6 +290,11 @@ export default function LoginPage({ onLogin }) {
           "Seu período de teste expirou. Por favor, entre em contato com o suporte para liberar seu acesso."
         );
         setShowTrialExpiredModal(true);
+
+        localStorage.removeItem("token");
+        localStorage.removeItem("refresh_token");
+        localStorage.removeItem("user_id");
+
         return;
       }
 
