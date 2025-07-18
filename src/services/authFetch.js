@@ -25,6 +25,18 @@ export async function authFetch(endpoint, options = {}) {
     let response = await fetch(`${API_URL}${endpoint}`, config);
 
     if (response.status === 401) {
+      const errorData = await response.json().catch(() => null);
+
+      if (errorData?.message === "Token expirado.") {
+        // Remove os tokens
+        localStorage.removeItem("token");
+        localStorage.removeItem("refresh");
+
+        // Redireciona ou avisa o usuário (opcional)
+        throw new Error("Sessão expirada. Faça login novamente.");
+      }
+
+      // Tenta renovar o token se não for o caso acima
       const refreshed = await refreshToken();
       if (!refreshed) {
         throw new Error("Sessão expirada. Faça login novamente.");
@@ -38,7 +50,7 @@ export async function authFetch(endpoint, options = {}) {
     if (!response.ok) {
       let errorMessage = "Erro ao fazer requisição";
       try {
-        const errorData = await response.text(); // como o backend retorna string
+        const errorData = await response.text(); // caso backend retorne string
         errorMessage = errorData || errorMessage;
       } catch (_) {}
 
