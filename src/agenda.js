@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { format, addDays, startOfWeek, isSameDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -116,7 +116,8 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: 80px repeat(7, 1fr);
   margin-top: 1rem;
-  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 70vh;
   scroll-behavior: smooth;
 
   @media (max-width: 768px) {
@@ -158,9 +159,6 @@ const TimeCell = styled.div`
 const GridCell = styled.div`
   height: 2rem;
   position: relative;
-  // Remova:
-  // border-top: 1px solid #e5e7eb;
-  // border-left: 1px solid #e5e7eb;
 `;
 
 const GridLine = styled.div`
@@ -205,24 +203,15 @@ const LogoutButton = styled(NewBookingButton)`
 
 export default function VolleyballCourtBooking() {
   const today = new Date();
+  const gridRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
-  const [bookings, setBookings] = useState([
-    {
-      id: "",
-      client_name: "",
-      date: "",
-      start_time: "",
-      end_time: "",
-    },
-  ]);
+  const [bookings, setBookings] = useState([]);
 
-  //fazer requisição para pegar as reservas
   useEffect(() => {
     const fetchBookings = async () => {
       try {
         const data = await getAllAgendas();
-        console.log("API data:", data); // 👈 aqui
         setBookings(data);
       } catch (error) {
         console.error("Erro ao buscar reservas:", error);
@@ -239,8 +228,8 @@ export default function VolleyballCourtBooking() {
     addDays(currentWeekStart, i)
   );
 
-  const times = Array.from({ length: 33 }, (_, i) => {
-    const hour = 8 + Math.floor(i / 2);
+  const times = Array.from({ length: 49 }, (_, i) => {
+    const hour = Math.floor(i / 2);
     const minute = i % 2 === 0 ? "00" : "30";
     return `${hour.toString().padStart(2, "0")}:${minute}`;
   });
@@ -257,20 +246,35 @@ export default function VolleyballCourtBooking() {
       0
     );
     const hue = hash % 360;
-    return `hsl(${hue}, 60%, 90%)`; // mais claro e menos saturado
+    return `hsl(${hue}, 60%, 90%)`;
   };
 
   const calculateBlockHeight = (booking) => {
     const [startH, startM] = booking.start_time.split(":").map(Number);
     const [endH, endM] = booking.end_time.split(":").map(Number);
     const duration = endH * 60 + endM - (startH * 60 + startM);
-    return (duration / 30) * 2; // cada 30min = 2rem de altura
+    return (duration / 30) * 2;
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // ou sessionStorage
-    window.location.href = "/login"; // redireciona para a tela de login
+    localStorage.removeItem("token");
+    window.location.href = "/login";
   };
+
+  // 👇 Scroll automático para o horário atual
+  useEffect(() => {
+    const now = new Date();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    const totalMinutes = hour * 60 + minute;
+    const blockHeight = 2 * 16; // 2rem * 16px
+
+    const scrollTo = (totalMinutes / 30) * blockHeight;
+
+    if (gridRef.current) {
+      gridRef.current.scrollTop = scrollTo - 100;
+    }
+  }, []);
 
   return (
     <Container>
@@ -281,7 +285,7 @@ export default function VolleyballCourtBooking() {
             <NewBookingButton onClick={() => setShowModal(true)}>
               + Novo Agendamento
             </NewBookingButton>
-            <LogoutButton onClick={() => handleLogout()}>Sair</LogoutButton>
+            <LogoutButton onClick={handleLogout}>Sair</LogoutButton>
           </div>
         </Header>
 
@@ -298,7 +302,7 @@ export default function VolleyballCourtBooking() {
           </DateRange>
         </Toolbar>
 
-        <Grid>
+        <Grid ref={gridRef}>
           <div></div>
           {weekDays.map((date, idx) => (
             <GridHeader key={idx} isToday={isSameDay(date, today)}>
